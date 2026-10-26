@@ -1,5 +1,16 @@
 # NEXIR LAB — Infrared Control & Analysis
 
+## Download e instalacao pelo GitHub
+
+- **[GitHub Actions — acompanhar compilacao](https://github.com/joaoguirqueiroz/Nexir-lab/actions)**
+- **[Releases — baixar APK apos build verde](https://github.com/joaoguirqueiroz/Nexir-lab/releases)**
+- **[Guia de instalacao](docs/INSTALACAO.md)** e **[Solucao de problemas](docs/RESOLUCAO-DE-PROBLEMAS.md)**
+
+Sempre que houver um novo envio a branch `main`, o workflow `.github/workflows/android.yml` executa validacoes, testes, compilacao Android e, se todas as etapas passarem, publica `NEXIR-LAB.apk` no Release `continuous`. O APK tambem fica como artefato temporario em Actions. Se nao houver Release ou o workflow estiver vermelho, ainda nao existe APK validado para esta revisao.
+
+> **Atualizacoes:** o APK automatico atual e assinado em modo debug. A chave do runner pode mudar entre compilacoes; Android pode recusar instalar a nova versao por cima da antiga. Para atualizacoes sem desinstalar, use assinatura permanente com keystore de producao configurado de forma privada. Nao publique a chave no repositorio.
+
+
 Aplicativo Android **nativo** de controle remoto infravermelho e laboratório de sinais IR para equipamentos próprios/autorizados. Interface escura em português. Código Kotlin, Android Studio, perfis locais JSON, captura externa com ESP32 Bluetooth Classic SPP e leitura assistida de etiquetas via OCR ML Kit **embarcado** (offline).
 
 ## O que foi implementado
