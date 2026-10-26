@@ -1,0 +1,106 @@
+name: Android - Compilar e publicar APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nexir-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Testes e APK instalavel
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    steps:
+      - name: Buscar arquivos do projeto
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Instalar Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Instalar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Instalar SDK Android 35
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+
+      - name: Validar biblioteca e arquivos
+        run: |
+          python3 tests/validate_profiles.py
+          python3 tests/validate_repository.py
+
+      - name: Testes Kotlin e compilacao do APK
+        run: gradle --no-daemon --stacktrace :app:testDebugUnitTest :app:assembleDebug
+
+      - name: Preparar APK e guia de instalacao
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk dist/NEXIR-LAB.apk
+          cp docs/INSTALACAO.md dist/COMO-INSTALAR.md
+          (cd dist && sha256sum NEXIR-LAB.apk > SHA256SUMS.txt)
+          test -s dist/NEXIR-LAB.apk
+
+      - name: Disponibilizar APK no Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: NEXIR-LAB-Android-APK
+          path: |
+            dist/NEXIR-LAB.apk
+            dist/COMO-INSTALAR.md
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publicar APK no GitHub Releases
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag='continuous'
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/NEXIR-LAB.apk dist/COMO-INSTALAR.md dist/SHA256SUMS.txt --clobber
+          else
+            gh release create "$tag" dist/NEXIR-LAB.apk dist/COMO-INSTALAR.md dist/SHA256SUMS.txt \
+              --target "$GITHUB_SHA" \
+              --title 'NEXIR LAB - APK automatico (teste)' \
+              --notes-file docs/NOTAS-RELEASE.md \
+              --prerelease --latest=false
+          fi
+
+      - name: Publicar versao marcada
+        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="$GITHUB_REF_NAME"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/NEXIR-LAB.apk dist/COMO-INSTALAR.md dist/SHA256SUMS.txt --clobber
+          else
+            gh release create "$tag" dist/NEXIR-LAB.apk dist/COMO-INSTALAR.md dist/SHA256SUMS.txt \
+              --title "NEXIR LAB $tag (APK de testes)" \
+              --notes-file docs/NOTAS-RELEASE.md \
+              --prerelease --latest=false
+          fi
