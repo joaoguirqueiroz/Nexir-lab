@@ -1,0 +1,59 @@
+[
+  {
+    "id":"samsung-tv-sample",
+    "name":"Samsung TV · série IR clássica",
+    "brand":"Samsung",
+    "model":"Vários modelos com controle IR Samsung (confirmar no teste)",
+    "note":"Códigos comuns publicados para controles Samsung. Compatibilidade não garantida. Utilize apenas em equipamentos sob seu controle.",
+    "commands":{
+      "POWER":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E040BF"},
+      "VOL_UP":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E0E01F"},
+      "VOL_DOWN":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E0D02F"},
+      "MUTE":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E0F00F"},
+      "CH_UP":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E048B7"},
+      "CH_DOWN":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E008F7"},
+      "SOURCE":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E0807F"},
+      "MENU":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E058A7"},
+      "UP":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E006F9"},
+      "DOWN":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E08679"},
+      "LEFT":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E0A659"},
+      "RIGHT":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E046B9"},
+      "OK":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E016E9"},
+      "BACK":{"protocol":"SAMSUNG","order":"MSB","frequency":38000,"code":"E0E01AE5"}
+    }
+  },
+  {
+    "id":"lg-tv-sample",
+    "name":"LG TV · série IR clássica",
+    "brand":"LG",
+    "model":"Vários modelos com controle IR LG (confirmar no teste)",
+    "note":"Perfil inicial para testes assistidos; TVs com controle Bluetooth Magic Remote podem ter funções diferentes.",
+    "commands":{
+      "POWER":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DF10EF"},
+      "VOL_UP":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DF40BF"},
+      "VOL_DOWN":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DFC03F"},
+      "MUTE":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DF906F"},
+      "CH_UP":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DF00FF"},
+      "CH_DOWN":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DF807F"},
+      "SOURCE":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DFD02F"},
+      "MENU":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"20DFC23D"}
+    }
+  },
+  {
+    "id":"nec-lab-remote",
+    "name":"Controle NEC 21 teclas · laboratório",
+    "brand":"Genérico",
+    "model":"Kit receptor IR NEC de bancada",
+    "note":"Códigos típicos de controles NEC de kits eletrônicos. Não é perfil universal de TVs.",
+    "commands":{
+      "POWER":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FFA25D"},
+      "VOL_UP":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF629D"},
+      "VOL_DOWN":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FFA857"},
+      "UP":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF18E7"},
+      "DOWN":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF4AB5"},
+      "LEFT":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF10EF"},
+      "RIGHT":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF5AA5"},
+      "OK":{"protocol":"NEC","order":"MSB","frequency":38000,"code":"00FF38C7"}
+    }
+  }
+]
