@@ -1,0 +1,47 @@
+name: IP SHADOW | Build and APK Release
+on:
+  push:
+    branches: [ip-shadow-preview]
+    paths:
+      - 'ip-shadow/**'
+      - '.github/workflows/ip-shadow.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Android SDK
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build debug APK
+        working-directory: ip-shadow
+        run: gradle --no-daemon :app:assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IP-SHADOW-APK
+          path: ip-shadow/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - name: Publish exclusive IP SHADOW release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp ip-shadow/app/build/outputs/apk/debug/app-debug.apk IP-SHADOW.apk
+          if gh release view ip-shadow-preview --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload ip-shadow-preview IP-SHADOW.apk --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create ip-shadow-preview IP-SHADOW.apk --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" --title 'IP SHADOW Android — APK Preview' \
+              --prerelease --notes 'APK experimental do IP SHADOW. Requer perfil WireGuard válido para conexão VPN.'
+          fi
