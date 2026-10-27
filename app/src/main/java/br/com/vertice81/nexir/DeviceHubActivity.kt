@@ -214,7 +214,7 @@ class DeviceHubActivity : Activity() {
             addView(spacer(8))
             line("CANAIS E REPRODUÇÃO", true)
             remoteRow(listOf("CANAL +" to "CH_UP", "CANAL −" to "CH_DOWN"))
-            remoteRow(listOf("⏮ VOLTAR" to "PREVIOUS", "▶ PAUSAR" to "PLAY_PAUSE", "AVANÇAR ⏭" to "NEXT"))
+            remoteRow(listOf("ANT." to "PREVIOUS", "PLAY" to "PLAY_PAUSE", "PRÓX." to "NEXT"))
             addView(spacer(8))
             line("ENTRADAS", true)
             if (lanMode) {
@@ -264,7 +264,11 @@ class DeviceHubActivity : Activity() {
         val useNetwork = lanMode
         thread(name = "nexir-send-single-command") {
             try {
-                val result = if (useNetwork) RokuControl.send(local!!.address, key)
+                val result = if (useNetwork) {
+                    val current = RokuControl.inspect(local!!.address)
+                    check(current.model == local.model && current.name == local.name) { "O aparelho da rede mudou. Faça uma nova identificação antes de controlar." }
+                    RokuControl.send(local.address, key)
+                }
                              else ir.transmit(command!!).let { "Padrão IR transmitido: ${it.pulses} durações, ${it.carrierHz} Hz" }
                 runOnUiThread { lastInfo = "${key.replace('_', ' ')} · $result"; toast("Comando enviado"); render() }
             } catch (e: Exception) {
