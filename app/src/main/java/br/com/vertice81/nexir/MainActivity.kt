@@ -84,6 +84,7 @@ class MainActivity : Activity() {
             events = { message -> runOnUiThread { log(message); if (tab == "DIAGNÓSTICO" || tab == "APRENDER") render() } },
             capture = { command -> runOnUiThread { lastCapture = command; log("Captura recebida: ${command.pattern?.size ?: 0} durações; 38 kHz presumidos"); showSaveCapture(command) } }
         )
+        intent.getStringExtra("start_tab")?.takeIf { it in setOf("CONTROLE", "BIBLIOTECA", "IDENTIFICAR", "APRENDER", "AUDITORIA", "DIAGNÓSTICO") }?.let { tab = it }
         render()
     }
 
