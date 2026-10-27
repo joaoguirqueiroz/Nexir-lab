@@ -1,5 +1,17 @@
 # NEXIR LAB — Infrared Control & Analysis
 
+## NEXIR LAB 1.2 — painel de controle e descoberta na rede
+
+O aplicativo abre agora com uma **central de controle redesenhada**, botões grandes e áreas **Controle / Dispositivos / Laboratório**.
+
+- **Sem ESP32, com IR no celular:** controle infravermelho real usando `ConsumerIrManager` e os códigos do perfil selecionado.
+- **Sem ESP32, com Roku no mesmo Wi-Fi:** busca Roku por SSDP, consulta nome/modelo/firmware via ECP, seleção explícita e comandos LAN quando o controle por aplicativos estiver habilitado.
+- **Outras TVs e telões:** reconhecimento inicial de anúncios Google Cast/AirPlay/HTTP via mDNS (sem prometer controle), identificação pela etiqueta no laboratório e mensagens sobre integração autorizada.
+- **Sem emissor IR e sem protocolo de rede compatível:** não é possível controlar qualquer aparelho universalmente.
+
+Guia técnico e testes: **[Controle sem ESP32](docs/CONTROLE-SEM-ESP32.md)**. Download do APK de testes: **[GitHub Releases](https://github.com/joaoguirqueiroz/Nexir-lab/releases)** — disponível somente depois de uma build bem-sucedida.
+
+
 ## Download e instalacao pelo GitHub
 
 - **[GitHub Actions — acompanhar compilacao](https://github.com/joaoguirqueiroz/Nexir-lab/actions)**
