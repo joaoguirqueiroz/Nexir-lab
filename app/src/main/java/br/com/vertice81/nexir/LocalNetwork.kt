@@ -174,6 +174,27 @@ class LanDiscovery(
                             address = "Via mDNS", protocol = "MDNS", controllable = false
                         ))
                     }
+                    // Resolução mDNS é informativa: não ativa controle sem pareamento.
+                    try {
+                        nsd.resolveService(info, object : NsdManager.ResolveListener {
+                            override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {}
+                            override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
+                                val attributes = serviceInfo.attributes
+                                val model = attributes["md"]?.toString(Charsets.UTF_8)?.take(80)
+                                    ?: "Modelo não anunciado"
+                                val friendly = attributes["fn"]?.toString(Charsets.UTF_8)?.take(80)
+                                    ?: name
+                                val ip = serviceInfo.host?.hostAddress ?: "IP não divulgado"
+                                main.post {
+                                    if (running) found(LanDevice(
+                                        id = "nsd:$serviceType:$name", name = friendly,
+                                        kind = kind, model = model, address = ip,
+                                        protocol = "MDNS", controllable = false
+                                    ))
+                                }
+                            }
+                        })
+                    } catch (_: Exception) {}
                 }
             }
             try {
