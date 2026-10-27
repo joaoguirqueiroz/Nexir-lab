@@ -3,6 +3,10 @@
     <uses-feature android:name="android.hardware.consumerir" android:required="false"/>
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <uses-permission android:name="android.permission.TRANSMIT_IR" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
@@ -10,9 +14,10 @@
         android:label="NEXIR LAB"
         android:allowBackup="false"
         android:theme="@style/Theme.Nexir"
-        android:usesCleartextTraffic="false"
+        android:usesCleartextTraffic="true"
         android:icon="@drawable/ic_launcher">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".DeviceHubActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
